@@ -1,0 +1,20 @@
+# Python staff
+venv/
+__pycache__/
+*.pyc
+
+# Docker staff
+.env
+.env.*
+
+# Alembic staff
+alembic/versions/__pycache__/
+
+# VS Code staff
+.vscode/
+
+# Logs
+*.log
+
+# temp files
+_temp/
