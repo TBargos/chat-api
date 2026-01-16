@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy import Column, Integer, String, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Mapped, relationship
 
 from app.database import Base
 
@@ -9,27 +9,27 @@ from app.database import Base
 class Chat(Base):
     __tablename__ = "chats"
 
-    id = Column(
+    id: Mapped[int] = Column(
         Integer,
         primary_key=True,
     )
 
-    title = Column(
+    title: Mapped[str] = Column(
         String,
-        nullable=False
+        nullable=False,
     )
 
     created_at = Column(
-        DateTime,
+        DateTime(timezone=True),
         nullable=False,
-        default=lambda: datetime.now(timezone.utc)
+        default=lambda: datetime.now(timezone.utc),
     )
 
     # Связь: один чат → много сообщений
-    messages = relationship(
+    messages: Mapped[list["Message"]] = relationship(
         "Message",
         back_populates="chat",
-        cascade="all, delete-orphan"
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self) -> str:
