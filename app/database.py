@@ -2,7 +2,8 @@ import os
 
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, sessionmaker, Session
+from typing import Generator
 
 
 class Base(DeclarativeBase):
@@ -28,3 +29,8 @@ SessionLocal = sessionmaker(
     autocommit=False,
     expire_on_commit=False
 )
+
+
+def get_session() -> Generator[Session, None, None]:
+    with SessionLocal() as session:
+        yield session
