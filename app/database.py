@@ -17,6 +17,14 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 if not DATABASE_URL:
     raise RuntimeError("DATABASE_URL is not set.")
 
+IN_DOCKER = os.path.exists("/.dockerenv")
+
+if IN_DOCKER and ("localhost" in DATABASE_URL or "127.0.0.1" in DATABASE_URL):
+    raise RuntimeError(
+        "DATABASE_URL содержит localhost.\n"
+        "В Docker используй имя сервиса."
+    )
+
 engine = create_engine(
     DATABASE_URL,
     echo=True,
