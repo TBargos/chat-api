@@ -1,6 +1,6 @@
-from sqlalchemy import select
+from sqlalchemy import select, exists, exc as sa_exc
 from sqlalchemy.orm import Session
-from app.models import Message
+from app.models import Message, Chat
 from app.schemas.message import MessageCreate
 
 
@@ -8,9 +8,16 @@ DEFAULT_LIMIT = 20
 MAX_LIMIT = 100
 
 
-def send_message(db: Session, message_in: MessageCreate) -> Message:
+def send_message(db: Session, message_in: MessageCreate, chat_id: int) -> Message:
+    chat_exists = db.execute(
+        select(exists().where(Chat.id == chat_id))
+    ).scalar()
+
+    if not chat_exists:
+        raise sa_exc.NoResultFound("Chat does not exist")
+
     message = Message(
-        chat_id=message_in.chat_id,
+        chat_id=chat_id,
         text=message_in.content,
     )
     db.add(message)
