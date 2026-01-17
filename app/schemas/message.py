@@ -3,7 +3,6 @@ from datetime import datetime
 
 
 class MessageCreate(BaseModel):
-    chat_id: int
     content: str
 
 
