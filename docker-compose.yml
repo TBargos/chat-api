@@ -17,5 +17,19 @@ services:
     ports:
       - "5432:5432"
 
+  api:
+    build: .
+    container_name: fastapi_app
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    depends_on:
+      - db
+
+    ports:
+      - "8000:8000"
+
 volumes:
   postgres_data:
